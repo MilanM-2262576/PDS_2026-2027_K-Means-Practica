@@ -2,10 +2,12 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <utility>
 #include "CSVReader.hpp"
 #include "CSVWriter.hpp"
 #include "rng.h"
 #include "timer.h"
+
 
 void usage()
 {
@@ -131,6 +133,54 @@ FileCSVWriter openDebugFile(const std::string &n)
 	return f;
 }
 
+std::pair<int, double> find_closest_centroid_index_and_distance(size_t rowNumber, const std::vector<double> &allData, size_t numCols, const std::vector<std::vector<double>> &centroids)
+{
+    int closestCluster = -1;
+    double minDistanceSq = std::numeric_limits<double>::max();
+
+    for (int j = 0; j < centroids.size(); ++j) {
+        double currentDistSq = 0.0;
+
+        for (size_t d = 0; d < numCols; ++d) {
+            double diff = allData[rowNumber * numCols + d] - centroids[j][d];
+            currentDistSq += diff * diff;
+        }
+
+        // Strikt kleiner: bij gelijke afstand wint de laagste index (zoals de referentie)
+        if (currentDistSq < minDistanceSq) {
+            minDistanceSq = currentDistSq;
+            closestCluster = j;
+        }
+    }
+
+    return std::make_pair(closestCluster, minDistanceSq);
+}
+
+// Gemiddelde van alle punten die tot cluster 'clusterIndex' horen
+std::vector<double> average_of_points_with_cluster(const std::vector<std::vector<double>> &centroids, int clusterIndex, const std::vector<int> &clusters, const std::vector<double> &allData, size_t numCols)
+{
+    std::vector<double> sum(numCols, 0.0);
+    size_t count = 0;
+
+    for (size_t p = 0; p < clusters.size(); ++p) {
+        if (clusters[p] == clusterIndex) {
+            for (size_t d = 0; d < numCols; ++d)
+                sum[d] += allData[p * numCols + d];
+            ++count;
+        }
+    }
+
+    // Lege cluster: niets om te middelen, dus de oude centroid behouden
+    if (count == 0)
+        return centroids[clusterIndex];
+
+    for (size_t d = 0; d < numCols; ++d)
+        sum[d] /= static_cast<double>(count);
+
+    return sum;
+}
+
+
 int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFileName,
            int numClusters, int repetitions, int numBlocks, int numThreads,
            const std::string &centroidDebugFileName, const std::string &clusterDebugFileName)
@@ -148,12 +198,26 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 	}
 
 	// TODO: load dataset
+	std::ifstream inFile(inputFile);
+    if (!inFile.is_open())
+    {
+        std::cerr << "Unable to open input file " << inputFile << std::endl;
+        return -1;
+    }
 
+    std::vector<double> allData;
+    size_t numRows = 0, numCols = 0;
+    readData(inFile, allData, numRows, numCols);
+    inFile.close();
+	//////////////////////////////
+	
 	// This is a basic timer from std::chrono ; feel free to use the appropriate timer for
 	// each of the technologies, e.g. OpenMP has omp_get_wtime()
 	Timer timer;
 
+	std::vector<int> bestClusters;
 	double bestDistSquaredSum = std::numeric_limits<double>::max(); // can only get better
+
 	std::vector<size_t> stepsPerRepetition(repetitions); // to save the number of steps each rep needed
 
     // Do the k-means routine a number of times, each time starting from
@@ -165,6 +229,64 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
         // TODO: perform an actual k-means run, starting from random centroids
         //       (see rng.h)
 		std::cerr << "TODO: implement this" << std::endl;
+
+		std::vector<size_t> indices(numClusters);		//K-means K = numClusters 	0 staat voor beginwaarde vector
+		rng.pickRandomIndices(numRows, indices);			//#rows uit dataset = #datapunten  we krijgen dus vector terug met K random indices van de datapunten bv.indices = [42, 1089, 3500]
+
+
+		// Kopieer de datapunten op deze indices naar een centroids-vector
+        std::vector<std::vector<double>> centroids(numClusters);	// bv. [[1.2, 3.4][5.6, 7.8][2.1, 9.0]] k=3
+				for (size_t j = 0; j < numClusters; ++j) {
+					for (size_t d = 0; d < numCols; ++d) {
+						centroids[j].push_back(allData[indices[j] * numCols + d]);
+					}
+				}
+
+		std::vector<int> clusters(numRows, -1);	// Hier houden we bij welke kleur elk datapunt krijgt oftewel bij welke centroid het gaat behoren
+
+		double distanceSquaredSum = 0;
+
+		bool changed = true; 
+		while (changed) {	// kijken per stap of de centroids nog veranderen
+			changed = false;
+
+			//clusters wegschrijven naar debug
+			if (clustersDebugFile.is_open())
+				clustersDebugFile.write(clusters);
+
+			//centroids wegschrijven naar debug
+			if (centroidDebugFile.is_open())
+            	for (int j = 0; j < numClusters; j++)
+					centroidDebugFile.write(centroids[j]);
+
+					
+			for (int p = 0; p < numRows; p++) {	//elk punt uit dataset afgaan
+					std::pair<int, double> newCluster_distance = find_closest_centroid_index_and_distance(p, allData, numCols, centroids);
+					distanceSquaredSum += newCluster_distance.second;
+
+					if (newCluster_distance.first != clusters[p]) {	// als het punt bij een andere centroid hoort dan voorheen
+						clusters[p] = newCluster_distance.first;	// update cluster index
+						changed = true;	// er is een verandering, dus we moeten nog een stap doen
+					}
+			};
+
+			// recalculate the centroids based on current clustering
+			if (changed) {
+				for (int j = 0; j < numClusters; j++){
+					centroids[j] = average_of_points_with_cluster(centroids, j, clusters, allData, numCols);	// recalculeer de centroid van cluster j
+				}
+			}
+
+			
+			numSteps++;
+		
+		};
+
+			// Keep track of best clustering
+		if (distanceSquaredSum < bestDistSquaredSum) {
+				bestDistSquaredSum = distanceSquaredSum;
+				bestClusters = clusters;
+			}
 
 		stepsPerRepetition[r] = numSteps;
 
