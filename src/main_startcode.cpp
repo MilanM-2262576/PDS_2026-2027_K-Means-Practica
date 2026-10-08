@@ -243,12 +243,22 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 				}
 
 		std::vector<int> clusters(numRows, -1);	// Hier houden we bij welke kleur elk datapunt krijgt oftewel bij welke centroid het gaat behoren
-
-		double distanceSquaredSum = 0;
+		double distanceSquaredSum = 0.0;
 
 		bool changed = true; 
 		while (changed) {	// kijken per stap of de centroids nog veranderen
 			changed = false;
+			distanceSquaredSum = 0.0;
+						
+			for (int p = 0; p < numRows; p++) {	//elk punt uit dataset afgaan
+					std::pair<int, double> newCluster_distance = find_closest_centroid_index_and_distance(p, allData, numCols, centroids);
+					distanceSquaredSum += newCluster_distance.second;
+
+					if (newCluster_distance.first != clusters[p]) {	// als het punt bij een andere centroid hoort dan voorheen
+						clusters[p] = newCluster_distance.first;	// update cluster index
+						changed = true;	// er is een verandering, dus we moeten nog een stap doen
+					}
+			};
 
 			//clusters wegschrijven naar debug
 			if (clustersDebugFile.is_open())
@@ -259,16 +269,6 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
             	for (int j = 0; j < numClusters; j++)
 					centroidDebugFile.write(centroids[j]);
 
-					
-			for (int p = 0; p < numRows; p++) {	//elk punt uit dataset afgaan
-					std::pair<int, double> newCluster_distance = find_closest_centroid_index_and_distance(p, allData, numCols, centroids);
-					distanceSquaredSum += newCluster_distance.second;
-
-					if (newCluster_distance.first != clusters[p]) {	// als het punt bij een andere centroid hoort dan voorheen
-						clusters[p] = newCluster_distance.first;	// update cluster index
-						changed = true;	// er is een verandering, dus we moeten nog een stap doen
-					}
-			};
 
 			// recalculate the centroids based on current clustering
 			if (changed) {
@@ -308,7 +308,7 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 	// Write the number of steps per repetition, kind of a signature of the work involved
 	csvOutputFile.write(stepsPerRepetition, "# Steps: ");
 	// Write best clusters to csvOutputFile, something like
-	// csvOutputFile.write( best cluster indices )
+	csvOutputFile.write( bestClusters );
 	return 0;
 }
 

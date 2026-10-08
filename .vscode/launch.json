@@ -10,7 +10,7 @@
         "--input", "${workspaceFolder}/datasets/mouse_500x2.csv",
         "--output", "${workspaceFolder}/src/output.csv",
         "--k", "3",
-        "--repetitions", "2",
+        "--repetitions", "10",
         "--seed", "1338",
         "--trace", "${workspaceFolder}/src/clustertrace.csv",
         "--centroidtrace", "${workspaceFolder}/src/centroidtrace.csv"
