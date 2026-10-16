@@ -228,7 +228,7 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 		size_t numSteps = 0;
         // TODO: perform an actual k-means run, starting from random centroids
         //       (see rng.h)
-		std::cerr << "TODO: implement this" << std::endl;
+		//std::cerr << "TODO: implement this" << std::endl;
 
 		std::vector<size_t> indices(numClusters);		//K-means K = numClusters 	0 staat voor beginwaarde vector
 		rng.pickRandomIndices(numRows, indices);			//#rows uit dataset = #datapunten  we krijgen dus vector terug met K random indices van de datapunten bv.indices = [42, 1089, 3500]

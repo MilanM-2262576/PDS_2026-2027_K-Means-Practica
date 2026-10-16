@@ -1,0 +1,56 @@
+------------------------------------------------------------------------------
+gcc (GCC) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+make: Entering directory '/vsc-hard-mounts/leuven-user/393/vsc39325/KMEANS-practica_opdracht1_serieleversie/src'
+rm -f kmeans
+make: Leaving directory '/vsc-hard-mounts/leuven-user/393/vsc39325/KMEANS-practica_opdracht1_serieleversie/src'
+make: Entering directory '/vsc-hard-mounts/leuven-user/393/vsc39325/KMEANS-practica_opdracht1_serieleversie/src'
+g++ -O3 -DNDEBUG -std=c++14 -o kmeans main_startcode.cpp rng.cpp
+make: Leaving directory '/vsc-hard-mounts/leuven-user/393/vsc39325/KMEANS-practica_opdracht1_serieleversie/src'
+
+=== START 10 METINGEN ===
+
+--- Run 1 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.50793
+
+--- Run 2 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.52508
+
+--- Run 3 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.51769
+
+--- Run 4 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.52263
+
+--- Run 5 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.49395
+
+--- Run 6 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.52894
+
+--- Run 7 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.49293
+
+--- Run 8 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.49638
+
+--- Run 9 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.51879
+
+--- Run 10 van 10 ---
+sequential,1,1,datasets/100000x5.csv,1337,10,20,2.25117e+12,3.48827
+
+=== EINDE METINGEN ===
+------------------------------------------------------------------------------
+JOBSTAT:ELAPSED_SECONDS=39
+JOBSTAT:SLURM_CLUSTER_NAME=mindwell
+JOBSTAT:SLURM_NODELIST=m11c05n1
+JOBSTAT:SLURM_NTASKS=72
+JOBSTAT:SLURM_GPUS_PER_NODE=
+JOBSTAT:SLURM_JOB_CPUS_PER_NODE=72
+JOBSTAT:SLURM_JOB_NUM_NODES=1
+JOBSTAT:SLURM_JOB_PARTITION=batch_graniterapids
+JOBSTAT:ESTIMATED_CREDITS=121

@@ -1,0 +1,12 @@
+# Running ['src/kmeans', '--input', 'datasets/100000x5.csv', '--k', '10', '--output', 'out.csv.1', '--repetitions', '20', '--seed', '1337', '--trace', 'clustertrace.csv.1', '--centroidtrace', 'centroidtrace.csv.1']
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds
+# Running ['/data/leuven/303/vsc30380/kmeans_serial_reference', '--input', 'datasets/100000x5.csv', '--k', '10', '--output', 'out.csv.2', '--repetitions', '20', '--seed', '1337', '--trace', 'clustertrace.csv.2', '--centroidtrace', 'centroidtrace.csv.2']
+# Loaded 100000x5 matrix
+# New best on repetition 0: 2.58959e+12 (difference is 1.79769e+308)
+# New best on repetition 10: 2.25117e+12 (difference is 3.38417e+11)
+# New best on repetition 13: 2.25117e+12 (difference is 5830.29)
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds
+# Output checks out: ['out.csv.1', 'out.csv.2']
+# Output checks out: ['clustertrace.csv.1', 'clustertrace.csv.2']
+# Output checks out: ['centroidtrace.csv.1', 'centroidtrace.csv.2']
+# Done
