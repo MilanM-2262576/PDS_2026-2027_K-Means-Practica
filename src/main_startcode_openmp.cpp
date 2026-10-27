@@ -270,15 +270,14 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 					}
 			};
 
-			//clusters wegschrijven naar debug
-			if (clustersDebugFile.is_open())
-				clustersDebugFile.write(clusters);
+			if (r == 0) {
+				if (clustersDebugFile.is_open())
+					clustersDebugFile.write(clusters);
 
-			//centroids wegschrijven naar debug
-			if (centroidDebugFile.is_open())
-            	for (int j = 0; j < numClusters; j++)
-					centroidDebugFile.write(centroids[j]);
-
+				if (centroidDebugFile.is_open())
+					for (int j = 0; j < numClusters; j++)
+						centroidDebugFile.write(centroids[j]);
+			}
 
 			// recalculate the centroids based on current clustering
 			if (changed) {
@@ -305,8 +304,11 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 
 		// Make sure debug logging is only done on first iteration ; subsequent checks
 		// with is_open will indicate that no logging needs to be done anymore.
-		centroidDebugFile.close();
-		clustersDebugFile.close();
+
+		if (r == 0) {
+			centroidDebugFile.close();
+			clustersDebugFile.close();
+		}
 	}
 
 	//timer.stop();
