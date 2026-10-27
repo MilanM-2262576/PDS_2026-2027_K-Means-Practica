@@ -216,7 +216,6 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 	// This is a basic timer from std::chrono ; feel free to use the appropriate timer for
 	// each of the technologies, e.g. OpenMP has omp_get_wtime()
 	//Timer timer;
-	omp_set_num_threads(numThreads);
 	double startTime = omp_get_wtime();
 
 	std::vector<int> bestClusters;
@@ -227,6 +226,10 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
     // Do the k-means routine a number of times, each time starting from
     // different random centroids (use Rng::pickRandomIndices), and keep 
     // the best result of these repetitions.
+
+	omp_set_num_threads(numThreads);
+
+	#pragma omp parallel for schedule(dynamic)
 	for (int r = 0 ; r < repetitions ; r++)
 	{
 		size_t numSteps = 0;
@@ -235,8 +238,12 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 		//std::cerr << "TODO: implement this" << std::endl;
 
 		std::vector<size_t> indices(numClusters);		//K-means K = numClusters 	0 staat voor beginwaarde vector
-		rng.pickRandomIndices(numRows, indices);			//#rows uit dataset = #datapunten  we krijgen dus vector terug met K random indices van de datapunten bv.indices = [42, 1089, 3500]
 
+		//zo kan elke thread zonder een conflict met anderen threads het object rng gebruiken
+		#pragma omp critical
+		{
+			rng.pickRandomIndices(numRows, indices);			//#rows uit dataset = #datapunten  we krijgen dus vector terug met K random indices van de datapunten bv.indices = [42, 1089, 3500]
+		}
 
 		// Kopieer de datapunten op deze indices naar een centroids-vector
         std::vector<std::vector<double>> centroids(numClusters);	// bv. [[1.2, 3.4][5.6, 7.8][2.1, 9.0]] k=3
@@ -253,8 +260,6 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 		while (changed) {	// kijken per stap of de centroids nog veranderen
 			changed = false;
 			distanceSquaredSum = 0.0;
-			
-			#pragma omp parallel for reduction(||:changed) reduction(+:distanceSquaredSum)
 			for (int p = 0; p < numRows; p++) {	//elk punt uit dataset afgaan
 					std::pair<int, double> newCluster_distance = find_closest_centroid_index_and_distance(p, allData, numCols, centroids);
 					distanceSquaredSum += newCluster_distance.second;
@@ -287,12 +292,15 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 		
 		};
 
+		// deze maken we ook critical tegen dataraces bij het vergelijken of hij nu beter is, iedereen moet dit nu op een ander tijdstip doen waardoor het weer werkt
+		#pragma omp critical
+		{
 			// Keep track of best clustering
 		if (distanceSquaredSum < bestDistSquaredSum) {
 				bestDistSquaredSum = distanceSquaredSum;
 				bestClusters = clusters;
 			}
-
+		}
 		stepsPerRepetition[r] = numSteps;
 
 		// Make sure debug logging is only done on first iteration ; subsequent checks
