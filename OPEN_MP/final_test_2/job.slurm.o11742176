@@ -1,0 +1,51 @@
+------------------------------------------------------------------------------
+g++ (GCC) 11.5.0 20240719 (Red Hat 11.5.0-14)
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+rm -f kmeans_omp
+g++ -O3 -DNDEBUG -std=c++14 -fopenmp -o kmeans_omp main_startcode_openmp.cpp rng.cpp
+=== START KMEANS OPENMP ===
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds
+sequential,1,1,../datasets/100000x5.csv,1338,10,20,2.25117e+12,2.55633
+sequential,1,1,../datasets/100000x5.csv,1338,10,20,2.25117e+12,2.56417
+sequential,1,1,../datasets/100000x5.csv,1338,10,20,2.25117e+12,2.55776
+sequential,1,1,../datasets/100000x5.csv,1338,10,20,2.25117e+12,2.56715
+sequential,1,1,../datasets/100000x5.csv,1338,10,20,2.25117e+12,2.55827
+sequential,1,2,../datasets/100000x5.csv,1338,10,20,2.25117e+12,1.29683
+sequential,1,2,../datasets/100000x5.csv,1338,10,20,2.25117e+12,1.29802
+sequential,1,2,../datasets/100000x5.csv,1338,10,20,2.25117e+12,1.29175
+sequential,1,2,../datasets/100000x5.csv,1338,10,20,2.25117e+12,1.29638
+sequential,1,2,../datasets/100000x5.csv,1338,10,20,2.25117e+12,1.29527
+sequential,1,4,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.671685
+sequential,1,4,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.669446
+sequential,1,4,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.674069
+sequential,1,4,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.670557
+sequential,1,4,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.690884
+sequential,1,8,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.478979
+sequential,1,8,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.486789
+sequential,1,8,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.491508
+sequential,1,8,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.479299
+sequential,1,8,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.478288
+sequential,1,16,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.42868
+sequential,1,16,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.426773
+sequential,1,16,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.42822
+sequential,1,16,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.425676
+sequential,1,16,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.427738
+sequential,1,32,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.438242
+sequential,1,32,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.434278
+sequential,1,32,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.427798
+sequential,1,32,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.427018
+sequential,1,32,../datasets/100000x5.csv,1338,10,20,2.25117e+12,0.435376
+=== UITVOERING VOLTOOID ===
+------------------------------------------------------------------------------
+JOBSTAT:ELAPSED_SECONDS=38
+JOBSTAT:SLURM_CLUSTER_NAME=mindwell
+JOBSTAT:SLURM_NODELIST=m11c10n4
+JOBSTAT:SLURM_NTASKS=72
+JOBSTAT:SLURM_GPUS_PER_NODE=
+JOBSTAT:SLURM_JOB_CPUS_PER_NODE=72
+JOBSTAT:SLURM_JOB_NUM_NODES=1
+JOBSTAT:SLURM_JOB_PARTITION=batch_graniterapids
+JOBSTAT:ESTIMATED_CREDITS=118
