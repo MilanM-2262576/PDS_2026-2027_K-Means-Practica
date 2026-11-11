@@ -1,0 +1,52 @@
+------------------------------------------------------------------------------
+g++ (GCC) 14.3.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+rm -f kmeans
+g++ -O3 -DNDEBUG -std=c++14 -o kmeans main_startcode.cpp rng.cpp
+
+=== START 10 METINGEN ===
+
+--- Run 1 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,50.0108
+
+--- Run 2 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,50.1145
+
+--- Run 3 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,50.046
+
+--- Run 4 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,49.9554
+
+--- Run 5 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,50.2171
+
+--- Run 6 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,49.9493
+
+--- Run 7 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,50.1983
+
+--- Run 8 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,50.1686
+
+--- Run 9 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,50.0126
+
+--- Run 10 van 10 ---
+sequential,1,1,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,49.9902
+
+=== EINDE METINGEN ===
+------------------------------------------------------------------------------
+JOBSTAT:ELAPSED_SECONDS=504
+JOBSTAT:SLURM_CLUSTER_NAME=mindwell
+JOBSTAT:SLURM_NODELIST=p11c05n4
+JOBSTAT:SLURM_NTASKS=72
+JOBSTAT:SLURM_GPUS_PER_NODE=
+JOBSTAT:SLURM_JOB_CPUS_PER_NODE=72
+JOBSTAT:SLURM_JOB_NUM_NODES=1
+JOBSTAT:SLURM_JOB_PARTITION=batch_graniterapids
+JOBSTAT:ESTIMATED_CREDITS=1575
