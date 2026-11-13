@@ -231,13 +231,12 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 
 
 	//maak r onafhankelijke RNG_instantie
-	std::vector<Rng> rng_object_list;
-	rng_object_list.reserve(repetitions);
+	std::vector<std::vector<size_t>> rng_object_list(repetitions, std::vector<size_t>(numClusters));
 	for (int r = 0; r < repetitions; ++r) {
-		unsigned long repSeed = rng.getUsedSeed();
-		rng_object_list.emplace_back(repSeed);
-
+			rng.pickRandomIndices(numRows, rng_object_list[r]);
 	}
+
+	int bestRepetition = repetitions;
 
 	#pragma omp parallel for schedule(dynamic)
 	for (int r = 0 ; r < repetitions ; r++)
@@ -246,18 +245,15 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
         // TODO: perform an actual k-means run, starting from random centroids
         //       (see rng.h)
 		//std::cerr << "TODO: implement this" << std::endl;
-
-		std::vector<size_t> indices(numClusters);		//K-means K = numClusters 	0 staat voor beginwaarde vector
-
+	
 		//zo kan elke thread zonder een conflict met anderen threads het object rng gebruiken
 		//#pragma omp critical
 		//{
 		//	rng.pickRandomIndices(numRows, indices);			//#rows uit dataset = #datapunten  we krijgen dus vector terug met K random indices van de datapunten bv.indices = [42, 1089, 3500]
 		//}
 
-		//gebruik unieke RNG voor deze specifieke repetitie r
-		// ==> garandeert dat repetitie r in de parallelele versie inhoudelijk exact dezelfde berekening en stappen uitvoert als repetitie r in de seriele versie
-		rng_object_list[r].pickRandomIndices(numRows, indices);
+		// Elke thread heeft zijn eigen vector met random indices
+		const std::vector<size_t>& indices = rng_object_list[r];
 
 		// Kopieer de datapunten op deze indices naar een centroids-vector
         std::vector<std::vector<double>> centroids(numClusters);	// bv. [[1.2, 3.4][5.6, 7.8][2.1, 9.0]] k=3
@@ -269,8 +265,7 @@ int kmeans(Rng &rng, const std::string &inputFile, const std::string &outputFile
 
 		std::vector<int> clusters(numRows, -1);	// Hier houden we bij welke kleur elk datapunt krijgt oftewel bij welke centroid het gaat behoren
 		double distanceSquaredSum = 0.0;
-		int bestRepetition = std::numeric_limits<int>::max(); // Bijhouden voor keuze bij gelijkspel
-
+		
 		bool changed = true; 
 		while (changed) {	// kijken per stap of de centroids nog veranderen
 			changed = false;
