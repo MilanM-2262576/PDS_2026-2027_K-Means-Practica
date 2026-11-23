@@ -1,0 +1,8 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) cluster/wice/gpu_a100
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds
+[2026-11-22T09:05:49.002] error: *** JOB 62830480 ON k28g25 CANCELLED AT 2026-11-22T09:05:49 DUE TO TIME LIMIT ***

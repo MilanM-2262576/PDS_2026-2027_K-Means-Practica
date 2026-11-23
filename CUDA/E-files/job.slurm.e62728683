@@ -1,0 +1,5 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) cluster/wice/gpu_a100
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds

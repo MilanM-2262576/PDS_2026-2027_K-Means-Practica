@@ -1,0 +1,25 @@
+Voor je metingen op de NVIDIA A100 van wICE kies je het best een vast aantal van **256 threads per block** 
+(het meest efficiënte veelvoud van 32) en laat je het aantal blocks variëren volgens de 
+reeks **1, 2, 4, 8, 16, 32, 64, 108, 216, 432, 864**. De waarden **1, 8 en 16** heb je verplicht nodig 
+als referentiepunt en om met de wet van Amdahl de seriële fractie en verwachte uitvoertijd voor je 
+verslag te berekenen. Vervolgens tel je door naar **108**, omdat de A100 precies 108 rekenkernen (SMs) 
+heeft en bij dat aantal voor het eerst de volledige chip tegelijk aan het werk is. Ten slotte verdubbel
+je verder naar **216, 432 en 864** ($2\times$, $4\times$ en $8\times 108$), omdat elke SM maximaal 2048 
+threads kan vasthouden en er bij 256 threads per block dus precies 8 blocks tegelijk op elke kern passen
+om geheugenvertragingen optimaal op te vangen. Herhaal elke meting een vijftal keer (met een warm-up run vooraf)
+voor een betrouwbaar gemiddelde en standaardafwijking, en zet je Slurm-tijdslimiet voor de zekerheid 
+op **20 minuten** (`#SBATCH --time=00:20:00`).
+
+2048 threads mog per SM
+als 256 threads dan kunner er per sm 8 blocks zitten 8*256=2048
+
+let op er is ook een max aantal threads per block van 1024
+
+
+samenvatting
+managed->>duurde heel lang(nog met data en param van openmp)
+niet managed-> cava maar nog altijd langer dan openmp
+niet magagemd met bv efficient breeken van nieuwe centroids ->ok 
+3M data set -> bij serieel geen output na 1.5 uur
+1M data set-> wel output
+bij 1M dataset 512 threds het beste bij 108 blocks, dus we werken met 512 threads en laten nu de blocks varieren

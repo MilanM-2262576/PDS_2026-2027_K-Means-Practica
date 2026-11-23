@@ -1,0 +1,12 @@
+------------------------------------------------------------------------------
+cuda,32,256,../datasets/100000x5.csv,2262576,10,200,2.25117e+12,90.9221
+------------------------------------------------------------------------------
+JOBSTAT:ELAPSED_SECONDS=103
+JOBSTAT:SLURM_CLUSTER_NAME=wice
+JOBSTAT:SLURM_NODELIST=k28g32
+JOBSTAT:SLURM_NTASKS=1
+JOBSTAT:SLURM_GPUS_PER_NODE=1
+JOBSTAT:SLURM_JOB_CPUS_PER_NODE=1
+JOBSTAT:SLURM_JOB_NUM_NODES=1
+JOBSTAT:SLURM_JOB_PARTITION=gpu_a100
+JOBSTAT:ESTIMATED_CREDITS=247

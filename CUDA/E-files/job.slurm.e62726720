@@ -1,0 +1,9 @@
+The following modules were not unloaded:
+  (Use "module --force purge" to unload all):
+
+  1) cluster/wice/gpu_a100
+../src/main_startcode_cuda.cu(102): warning #68-D: integer conversion resulted in a change of sign
+
+../src/main_startcode_cuda.cu(102): warning #68-D: integer conversion resulted in a change of sign
+
+# Type,blocks,threads,file,seed,clusters,repetitions,bestdistsquared,timeinseconds
